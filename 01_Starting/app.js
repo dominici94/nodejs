@@ -1,11 +1,30 @@
-const http = require("http");
+// const http = require("http");
 
-const routes = require("./routes");
+const express = require("express");
 
-// function rqListener(req, res) {}
+const app = express();
 
-// const server = http.createServer(rqListener);
+// app.use((req, res, next) => {
+//   console.log("In the middleware!");
+//   next(); // Permette alla richiesta di continuare al prossimo middleware
+// });
 
-const server = http.createServer(routes);
+app.use("/add-product", (req, res, next) => {
+  console.log("In a middleware!");
+  // ...
+  res.send("<h1>Add Product Page!</h1>");
+});
 
-server.listen(3000);
+app.use("/", (req, res, next) => {
+  console.log("In another middleware!");
+  // ...
+  res.send("<h1>Hello from express!</h1>");
+});
+
+// const routes = require("./routes");
+// const server = http.createServer(routes);
+
+// const server = http.createServer(app);
+// server.listen(3000);
+
+app.listen(3000);
