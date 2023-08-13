@@ -2,18 +2,30 @@
 const path = require("path");
 
 const express = require("express");
+const bodyParser = require("body-parser");
+const expressHbs = require("express-handlebars");
 
 // Utilizzo di applicazione con express
 const app = express();
 
-// Utilizzo di pug come template engine e va a prendere i file nella cartella views
-app.set("view engine", "pug");
+// Utilizzo di Handlebars come template engine
+app.engine(
+  "handlebars",
+  expressHbs({
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    // extname: "handlebars",
+  })
+);
+app.set("view engine", "handlebars");
 app.set("views", "views");
+
+// Utilizzo di pug come template engine e va a prendere i file nella cartella views
+// app.set("view engine", "pug");
+// app.set("views", "views");
 
 const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
-
-const bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
