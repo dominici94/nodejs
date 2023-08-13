@@ -22,6 +22,13 @@ router.get("/add-product", (req, res, next) => {
 
 // /admin/add-product => POST
 router.post("/add-product", (req, res, next) => {
+  if (req.body.title === "") {
+    return res.status(409).render("page-not-found", {
+      docTitle: "409: Input Error",
+      numberError: 409,
+      error: "Title must have at least one carachter!",
+    });
+  }
   products.push({
     title: req.body.title,
   });

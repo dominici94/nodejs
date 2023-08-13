@@ -38,7 +38,11 @@ app.use(shopRoutes);
 app.use((req, res, next) => {
   res
     .status(404)
-    .render("page-not-found", { docTitle: "404: Page Not Found!" });
+    .render("page-not-found", {
+      docTitle: "404: Page Not Found!",
+      numberError: 404,
+      error: "Page Not Found",
+    });
   // .sendFile(path.join(__dirname, "views", "page-not-found.html"));
 });
 
