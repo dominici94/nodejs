@@ -1,0 +1,24 @@
+<%- include('includes/head.ejs') %>
+<link rel="stylesheet" href="/css/users.css">
+  
+<!-- "/users" outputs an ul with the user names or some error text -->
+</head>
+<body>
+  <section class="users">
+    <% if (users.length > 0) { %>
+     
+      <ul class="users__list">
+        <% users.forEach(user => { %>
+          <li class="users__item"><%= user.username %></li>
+        <% }) %>
+      </ul>
+
+    <% }else{ %>
+
+      <h1 class="users__no-users">No usernames inserted!</h1>
+
+    <% } %>
+     
+  </section>
+</body>
+</html>

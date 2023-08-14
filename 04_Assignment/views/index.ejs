@@ -1,0 +1,14 @@
+<%- include('includes/head.ejs') %>
+  <link rel="stylesheet" href="/css/form.css">
+  <!--"/" holds a form that allows users to input their name -->
+</head>
+<body>
+  <div class="form-control">
+    <form action="/users" method="POST">
+      <label for="user" class="form-label">Set Your UserName</label>
+      <input type="text" class="form-input" name="username" id="user">
+      <button class="form-btn" type="submit">Send</button>
+    </form>
+  </div>
+</body>
+</html>

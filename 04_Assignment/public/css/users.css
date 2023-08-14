@@ -1,0 +1,21 @@
+.users {
+  margin: 1.25rem 2.5rem;
+}
+
+.users__list {
+  list-style: none;
+  border: 1px solid #d3d1d1;
+  padding: 10px;
+  border-radius: 3px;
+  /* background-color: red; */
+}
+
+.users__item {
+  border: 1px solid #d3d1d1;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.users__item:not(:last-child) {
+  margin-bottom: 0.9375rem;
+}
