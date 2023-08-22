@@ -19,7 +19,12 @@ exports.postAddProduct = (req, res, next) => {
   //     error: "Title must have at least one carachter!",
   //   });
   // }
-  const prod = new Product(req.body.title);
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const description = req.body.description;
+  const price = req.body.price;
+
+  const prod = new Product(title, imageUrl, description, price);
   prod.save();
 
   res.redirect("/");
@@ -27,13 +32,10 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
-    res.render("shop/product-list", {
+    res.render("admin/products", {
       prods: products,
-      docTitle: "Shop",
-      path: "/",
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCSS: true,
+      docTitle: "Admin Products",
+      path: "/admin/products",
     });
   });
 };
