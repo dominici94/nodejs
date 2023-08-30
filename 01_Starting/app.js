@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const expressHbs = require("express-handlebars");
 
 const pageNotFoundController = require("./controllers/pageNotFound");
-const db = require("./util/database");
+// const db = require("./util/database");
+const sequelize = require("./util/database");
 
 // Utilizzo di applicazione con express
 const app = express();
@@ -51,4 +52,12 @@ app.use(shopRoutes);
 // Rotta finale diversa da quelle dei file admin e shop che porta alla pagina di errore
 app.use(pageNotFoundController);
 
-app.listen(3000);
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log(result);
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

@@ -25,12 +25,20 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const price = req.body.price;
 
-  const prod = new Product(null, title, imageUrl, description, price);
-  prod
-    .save()
-    .then(() => {
-      res.redirect("/");
-    })
+  // const prod = new Product(null, title, imageUrl, description, price);
+  // prod
+  //   .save()
+  //   .then(() => {
+  //     res.redirect("/");
+  //   })
+  //   .catch((err) => console.log(err));
+  Product.create({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+  })
+    .then((result) => console.log("created Product"))
     .catch((err) => console.log(err));
 };
 
