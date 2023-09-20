@@ -32,12 +32,13 @@ exports.postAddProduct = (req, res, next) => {
   //     res.redirect("/");
   //   })
   //   .catch((err) => console.log(err));
-  Product.create({
-    title: title,
-    imageUrl: imageUrl,
-    price: price,
-    description: description,
-  })
+  req.user
+    .createProduct({
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+    })
     .then((result) => {
       console.log("created Product");
       res.redirect("/admin/products");
