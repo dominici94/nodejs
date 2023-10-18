@@ -1,4 +1,6 @@
 const Product = require("../models/product");
+const mongodb = require("mongodb");
+const ObjectId = mongodb.ObjectId;
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -32,13 +34,17 @@ exports.postAddProduct = (req, res, next) => {
   //     res.redirect("/");
   //   })
   //   .catch((err) => console.log(err));
-  req.user
-    .createProduct({
-      title: title,
-      imageUrl: imageUrl,
-      price: price,
-      description: description,
-    })
+  // req.user
+  //   .createProduct({
+  //     title: title,
+  //     imageUrl: imageUrl,
+  //     price: price,
+  //     description: description,
+  //   })
+  const product = new Product(title, price, description, imageUrl);
+
+  product
+    .save()
     .then((result) => {
       console.log("created Product");
       res.redirect("/admin/products");
@@ -52,6 +58,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
+
   // callback usando il metodo findById
   // Product.findById(prodId, (product) => {
   //   if (!product) {
@@ -68,10 +75,11 @@ exports.getEditProduct = (req, res, next) => {
   // Con sequelize uso il metodo findByPk e le promise
   // Product.findByPk(prodId)
 
-  req.user
-    .getProducts({ where: { id: prodId } })
-    .then((products) => {
-      const product = products[0];
+  // // req.user
+  // //   .getProducts({ where: { id: prodId } })
+  Product.findById(prodId)
+    .then((product) => {
+      // const product = products[0];
       if (!product) {
         return res.redirect("/");
       }
@@ -99,14 +107,29 @@ exports.postEditProduct = (req, res, next) => {
   //   updatedPrice
   // );
   // updatedProduct.save();
-  Product.findByPk(prodId)
-    .then((product) => {
-      product.title = updatedTitle;
-      product.price = updatedPrice;
-      product.description = updatedDescription;
-      product.imageUrl = updatedImageUrl;
-      return product.save();
-    })
+  // // Product.findByPk(prodId)
+  // //   .then((product) => {
+  // //     product.title = updatedTitle;
+  // //     product.price = updatedPrice;
+  // //     product.description = updatedDescription;
+  // //     product.imageUrl = updatedImageUrl;
+  // //     return product.save();
+  // //   })
+  // //   .then((result) => {
+  // //     console.log("Updated Product");
+  // //     res.redirect("/admin/products");
+  // //   })
+  // //   .catch((err) => console.log(err));
+
+  const product = new Product(
+    updatedTitle,
+    updatedPrice,
+    updatedDescription,
+    updatedImageUrl,
+    new ObjectId(prodId)
+  );
+  return product
+    .save()
     .then((result) => {
       console.log("Updated Product");
       res.redirect("/admin/products");
@@ -125,9 +148,7 @@ exports.getProducts = (req, res, next) => {
 
   // Using Sequelize
   // Product.findAll()
-
-  req.user
-    .getProducts()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -136,16 +157,31 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+
+  // // req.user
+  // //   .getProducts()
+  // //   .then((products) => {
+  // //     res.render("admin/products", {
+  // //       prods: products,
+  // //       docTitle: "Admin Products",
+  // //       path: "/admin/products",
+  // //     });
+  // //   })
+  // //   .catch((err) => console.log(err));
 };
 
 exports.deleteProduct = (req, res, next) => {
   const id = req.body.prodId;
 
   // Product.deleteById(id);
-  Product.findByPk(id)
-    .then((product) => {
-      return product.destroy();
-    })
-    .then((result) => res.redirect("/admin/products"))
+  // // Product.findByPk(id)
+  // //   .then((product) => {
+  // //     return product.destroy();
+  // //   })
+  // //   .then((result) => res.redirect("/admin/products"))
+  // //   .catch((err) => console.log(err));
+
+  Product.deleteById(id)
+    .then(() => res.redirect("/admin/products"))
     .catch((err) => console.log(err));
 };

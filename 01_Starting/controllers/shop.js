@@ -4,7 +4,7 @@ const Order = require("../models/order");
 const sequelize = require("../util/database");
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
@@ -39,8 +39,7 @@ exports.getProducts = (req, res, next) => {
 exports.getDetailedProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  // findByPk => metodo di sequelize per il Model
-  Product.findByPk(prodId)
+  Product.findById(prodId)
     .then((product) => {
       res.render("shop/product-detail", {
         path: "/products",
@@ -49,6 +48,17 @@ exports.getDetailedProduct = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+
+  // findByPk => metodo di sequelize per il Model
+  // // Product.findByPk(prodId)
+  // //   .then((product) => {
+  // //     res.render("shop/product-detail", {
+  // //       path: "/products",
+  // //       docTitle: product.title + "-" + prodId,
+  // //       prod: product,
+  // //     });
+  // //   })
+  // //   .catch((err) => console.log(err));
 
   // Product.findById(prodId)
   //   .then(([product]) => {
@@ -71,7 +81,7 @@ exports.getDetailedProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/index", {
         prods: products,
