@@ -7,6 +7,7 @@ const expressHbs = require("express-handlebars");
 
 const pageNotFoundController = require("./controllers/pageNotFound");
 const mongoConnect = require("./util/database").mongoConnect;
+const User = require("./models/user");
 // const db = require("./util/database");
 // const sequelize = require("./util/database");
 // const Product = require("./models/product");
@@ -53,13 +54,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  //   .then((user) => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch((err) => console.log(err));
-  next();
+  User.findById("65305fa5540bce43cfb8200c")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+  // next();
 });
 
 //Utilizzo di rotte admin e shop
