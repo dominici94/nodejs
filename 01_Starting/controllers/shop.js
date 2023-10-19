@@ -114,18 +114,20 @@ exports.getIndex = (req, res, next) => {
 exports.getCart = (req, res, next) => {
   req.user
     .getCart()
-    .then((cart) => {
-      return cart
-        .getProducts()
-        .then((products) =>
-          res.render("shop/cart", {
-            path: "/cart",
-            docTitle: "Your Cart",
-            products: products,
-          })
-        )
-        .catch((err) => console.log(err));
-    })
+    // // .then((cart) => {
+    // //   return (
+    // //     cart
+    // //       .getProducts()
+    .then((products) =>
+      res.render("shop/cart", {
+        path: "/cart",
+        docTitle: "Your Cart",
+        products: products,
+      })
+    )
+    .catch((err) => console.log(err))
+    // //   );
+    // // })
     .catch((err) => console.log(err));
   // Cart.getCart((cart) => {
   //   Product.fetchAll((products) => {
@@ -155,35 +157,44 @@ exports.postCart = (req, res, next) => {
   //   Cart.addProduct(prodId, prod.price);
   // });
   // res.redirect("/cart");
-  let fetchedCart;
-  let newQuantity = 1;
-  req.user
-    .getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts({ where: { id: prodId } });
-    })
-    .then((products) => {
-      let product;
-      if (products.length > 0) {
-        product = products[0];
-      }
+  // // // let fetchedCart;
+  // // // let newQuantity = 1;
+  // // // req.user
+  // // //   .getCart()
+  // // //   .then((cart) => {
+  // // //     fetchedCart = cart;
+  // // //     return cart.getProducts({ where: { id: prodId } });
+  // // //   })
+  // // //   .then((products) => {
+  // // //     let product;
+  // // //     if (products.length > 0) {
+  // // //       product = products[0];
+  // // //     }
 
-      if (product) {
-        const oldQuantity = product.cartItem.quantity;
-        newQuantity = oldQuantity + 1;
-        return product;
-      }
-      return Product.findByPk(prodId);
-    })
+  // // //     if (product) {
+  // // //       const oldQuantity = product.cartItem.quantity;
+  // // //       newQuantity = oldQuantity + 1;
+  // // //       return product;
+  // // //     }
+  // // //     return Product.findByPk(prodId);
+  // // //   })
+  // // //   .then((product) => {
+  // // //     return fetchedCart.addProduct(product, {
+  // // //       through: { quantity: newQuantity },
+  // // //     });
+  // // //   })
+  // // //   .catch((err) => console.log(err))
+  // // //   .then(() => {
+  // // //     return res.redirect("/cart");
+  // // //   })
+  // // //   .catch((err) => console.log(err));
+  Product.findById(prodId)
     .then((product) => {
-      return fetchedCart.addProduct(product, {
-        through: { quantity: newQuantity },
-      });
+      return req.user.addToCart(product);
     })
-    .catch((err) => console.log(err))
-    .then(() => {
-      return res.redirect("/cart");
+    .then((result) => {
+      console.log(result);
+      res.redirect("/cart");
     })
     .catch((err) => console.log(err));
 };

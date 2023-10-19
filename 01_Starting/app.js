@@ -56,7 +56,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   User.findById("65305fa5540bce43cfb8200c")
     .then((user) => {
-      req.user = user;
+      // In questo modo non vengono passati i metodi di user perchè va a prendere solamente i dati del database
+      // req.user = user;
+      // passando invece la classe new User passo anche i metodi
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch((err) => console.log(err));
